@@ -26,6 +26,7 @@ A containerized web application featuring a sleek, SEO-optimized sales form that
    MONGODB_URI=your-mongodb-connection-uri
    EMAIL_USER=your-email@gmail.com
    EMAIL_PASS=your-app-specific-password
+   NODE_ENV=production
    ```
 
 3. For local development:
@@ -46,15 +47,31 @@ A containerized web application featuring a sleek, SEO-optimized sales form that
    docker-compose up --build
    ```
 
+## DigitalOcean App Platform Deployment
+
+1. Push your code to a Git repository (GitHub, GitLab, etc.)
+2. In DigitalOcean App Platform:
+   - Create a new app
+   - Connect to your Git repository
+   - Set the following environment variables:
+     - `MONGODB_URI`: Your MongoDB connection string
+     - `EMAIL_USER`: Your Gmail address
+     - `EMAIL_PASS`: Your Gmail app-specific password
+     - `NODE_ENV`: Set to "production"
+   - Configure the build command: `npm install && cd client && npm install && npm run build && cd ..`
+   - Configure the run command: `npm start`
+   - Deploy the application
+
 ## Environment Variables
 
 - `MONGODB_URI`: Your DigitalOcean MongoDB connection string
 - `EMAIL_USER`: Your Gmail address
 - `EMAIL_PASS`: Your Gmail app-specific password
+- `NODE_ENV`: Set to "production" for production deployment
 
 ## Usage
 
-1. Access the application at `http://localhost:3000`
+1. Access the application at `http://localhost:3000` (local) or your DigitalOcean app URL
 2. Fill out the form with customer information
 3. Submit the form to:
    - Save data to MongoDB

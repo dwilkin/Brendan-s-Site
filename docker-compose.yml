@@ -9,6 +9,9 @@ services:
       - MONGODB_URI=${MONGODB_URI}
       - EMAIL_USER=${EMAIL_USER}
       - EMAIL_PASS=${EMAIL_PASS}
+      - NODE_ENV=production
+    command: >
+      sh -c "cd client && npm install && npm run build && cd .. && npm start"
 
   frontend:
     build: ./client
