@@ -15,7 +15,7 @@ A containerized web application featuring a sleek, SEO-optimized sales form that
 
 - Docker and Docker Compose
 - Node.js (for local development)
-- MongoDB (for local development)
+- DigitalOcean MongoDB database
 - Gmail account for email notifications
 
 ## Setup
@@ -23,6 +23,7 @@ A containerized web application featuring a sleek, SEO-optimized sales form that
 1. Clone the repository
 2. Create a `.env` file in the root directory with the following variables:
    ```
+   MONGODB_URI=mongodb+srv://doadmin:zq0K8h61Q5c74a9U@Brendans-app-6eccc0ed.mongo.ondigitalocean.com/admin?tls=true&authSource=admin&replicaSet=Brendans-app
    EMAIL_USER=your-email@gmail.com
    EMAIL_PASS=your-app-specific-password
    ```
@@ -47,9 +48,9 @@ A containerized web application featuring a sleek, SEO-optimized sales form that
 
 ## Environment Variables
 
+- `MONGODB_URI`: Your DigitalOcean MongoDB connection string
 - `EMAIL_USER`: Your Gmail address
 - `EMAIL_PASS`: Your Gmail app-specific password
-- `MONGODB_URI`: MongoDB connection string (default: mongodb://localhost:27017/sales-form)
 
 ## Usage
 
@@ -64,7 +65,6 @@ A containerized web application featuring a sleek, SEO-optimized sales form that
 
 - Backend runs on port 5000
 - Frontend runs on port 3000
-- MongoDB runs on port 27017
 
 ## License
 

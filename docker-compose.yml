@@ -6,11 +6,9 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - MONGODB_URI=mongodb://mongodb:27017/sales-form
+      - MONGODB_URI=${MONGODB_URI}
       - EMAIL_USER=${EMAIL_USER}
       - EMAIL_PASS=${EMAIL_PASS}
-    depends_on:
-      - mongodb
 
   frontend:
     build: ./client
@@ -18,13 +16,6 @@ services:
       - "3000:80"
     depends_on:
       - backend
-
-  mongodb:
-    image: mongo:latest
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb_data:/data/db
 
 volumes:
   mongodb_data: 
