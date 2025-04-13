@@ -36,14 +36,19 @@ const transporter = nodemailer.createTransport({
 
 // API Routes
 app.post('/api/submit-form', async (req, res) => {
+  console.log('Received form submission:', req.body);
+  
   try {
     const formData = req.body;
     
     // Save to MongoDB
+    console.log('Saving to MongoDB...');
     const newForm = new Form(formData);
     await newForm.save();
+    console.log('Saved to MongoDB successfully');
 
     // Send email
+    console.log('Sending email...');
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: 'darian@wilkin.online',
@@ -60,11 +65,15 @@ app.post('/api/submit-form', async (req, res) => {
     };
 
     await transporter.sendMail(mailOptions);
+    console.log('Email sent successfully');
     
     res.status(200).json({ message: 'Form submitted successfully' });
   } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ error: 'Failed to submit form' });
+    console.error('Error processing form submission:', error);
+    res.status(500).json({ 
+      error: 'Failed to submit form',
+      details: error.message 
+    });
   }
 });
 
@@ -87,6 +96,10 @@ mongoose.connect(process.env.MONGODB_URI)
       console.log(`Server running on port ${PORT}`);
       console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
       console.log(`Static files path: ${path.join(__dirname, 'client/build')}`);
+      console.log(`MongoDB URI: ${process.env.MONGODB_URI}`);
     });
   })
-  .catch(err => console.error('MongoDB connection error:', err)); 
+  .catch(err => {
+    console.error('MongoDB connection error:', err);
+    process.exit(1);
+  }); 

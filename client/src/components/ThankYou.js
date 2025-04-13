@@ -24,6 +24,7 @@ const ThankYou = () => {
             color="primary"
             size="large"
             onClick={handleCalendlyClick}
+            sx={{ minWidth: 200 }}
           >
             Schedule a Call
           </Button>

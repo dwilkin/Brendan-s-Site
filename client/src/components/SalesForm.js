@@ -8,6 +8,7 @@ import {
   Button,
   Box,
   Grid,
+  Alert,
 } from '@mui/material';
 import axios from 'axios';
 
@@ -21,6 +22,8 @@ const SalesForm = () => {
     projectDetails: '',
     budget: '',
   });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,11 +31,22 @@ const SalesForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
+
     try {
-      await axios.post('http://localhost:5000/api/submit-form', formData);
-      navigate('/thank-you');
+      // Get the current URL to determine the API endpoint
+      const baseUrl = window.location.origin;
+      const response = await axios.post(`${baseUrl}/api/submit-form`, formData);
+      
+      if (response.status === 200) {
+        navigate('/thank-you');
+      }
     } catch (error) {
       console.error('Error submitting form:', error);
+      setError('Failed to submit form. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -45,6 +59,12 @@ const SalesForm = () => {
         <Typography variant="subtitle1" gutterBottom align="center" sx={{ mb: 4 }}>
           Fill out the form below and we'll get back to you shortly
         </Typography>
+        
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
         
         <form onSubmit={handleSubmit}>
           <Grid container spacing={3}>
@@ -118,8 +138,9 @@ const SalesForm = () => {
                   variant="contained"
                   color="primary"
                   size="large"
+                  disabled={loading}
                 >
-                  Submit
+                  {loading ? 'Submitting...' : 'Submit'}
                 </Button>
               </Box>
             </Grid>
