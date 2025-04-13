@@ -23,7 +23,7 @@ A containerized web application featuring a sleek, SEO-optimized sales form that
 1. Clone the repository
 2. Create a `.env` file in the root directory with the following variables:
    ```
-   MONGODB_URI=mongodb+srv://doadmin:zq0K8h61Q5c74a9U@Brendans-app-6eccc0ed.mongo.ondigitalocean.com/admin?tls=true&authSource=admin&replicaSet=Brendans-app
+   MONGODB_URI=your-mongodb-connection-uri
    EMAIL_USER=your-email@gmail.com
    EMAIL_PASS=your-app-specific-password
    ```
