@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  backend:
+  app:
     build: .
     ports:
       - "5000:5000"
@@ -10,15 +10,10 @@ services:
       - EMAIL_USER=${EMAIL_USER}
       - EMAIL_PASS=${EMAIL_PASS}
       - NODE_ENV=production
+    volumes:
+      - ./client:/app/client
     command: >
       sh -c "cd client && npm install && npm run build && cd .. && npm start"
-
-  frontend:
-    build: ./client
-    ports:
-      - "3000:80"
-    depends_on:
-      - backend
 
 volumes:
   mongodb_data: 

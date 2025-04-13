@@ -34,7 +34,7 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-// Routes
+// API Routes
 app.post('/api/submit-form', async (req, res) => {
   try {
     const formData = req.body;
@@ -71,11 +71,16 @@ app.post('/api/submit-form', async (req, res) => {
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
   // Set static folder
-  app.use(express.static(path.join(__dirname, 'client/build')));
+  const staticPath = path.join(__dirname, 'client/build');
+  console.log('Serving static files from:', staticPath);
+  
+  app.use(express.static(staticPath));
 
   // Handle React routing, return all requests to React app
   app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    const indexPath = path.join(staticPath, 'index.html');
+    console.log('Serving index.html from:', indexPath);
+    res.sendFile(indexPath);
   });
 }
 
@@ -85,6 +90,7 @@ mongoose.connect(process.env.MONGODB_URI)
     console.log('Connected to MongoDB');
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
+      console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
     });
   })
   .catch(err => console.error('MongoDB connection error:', err)); 
