@@ -14,6 +14,9 @@ RUN cd client && npm install
 COPY . .
 COPY client ./client
 
+# Ensure public directory exists
+RUN mkdir -p client/public
+
 # Build the React app
 RUN cd client && npm run build
 
