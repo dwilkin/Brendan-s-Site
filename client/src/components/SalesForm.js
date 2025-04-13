@@ -37,6 +37,7 @@ const SalesForm = () => {
     try {
       // Get the current URL to determine the API endpoint
       const baseUrl = window.location.origin;
+      console.log('Submitting form to:', `${baseUrl}/api/submit-form`);
       const response = await axios.post(`${baseUrl}/api/submit-form`, formData);
       
       if (response.status === 200) {
@@ -44,7 +45,8 @@ const SalesForm = () => {
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      setError('Failed to submit form. Please try again.');
+      const errorMessage = error.response?.data?.details || error.response?.data?.error || 'Failed to submit form. Please try again.';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

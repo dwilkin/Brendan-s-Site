@@ -41,6 +41,11 @@ app.post('/api/submit-form', async (req, res) => {
   try {
     const formData = req.body;
     
+    // Validate form data
+    if (!formData.name || !formData.email || !formData.phone) {
+      throw new Error('Required fields are missing');
+    }
+
     // Save to MongoDB
     console.log('Saving to MongoDB...');
     const newForm = new Form(formData);
@@ -70,9 +75,11 @@ app.post('/api/submit-form', async (req, res) => {
     res.status(200).json({ message: 'Form submitted successfully' });
   } catch (error) {
     console.error('Error processing form submission:', error);
+    console.error('Error stack:', error.stack);
     res.status(500).json({ 
       error: 'Failed to submit form',
-      details: error.message 
+      details: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
   }
 });
@@ -88,10 +95,32 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI)
+// Connect to MongoDB with retry logic
+const connectWithRetry = async (retries = 5, delay = 5000) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      console.log(`Attempting to connect to MongoDB (attempt ${i + 1}/${retries})...`);
+      await mongoose.connect(process.env.MONGODB_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      });
+      console.log('Connected to MongoDB successfully');
+      return;
+    } catch (error) {
+      console.error(`MongoDB connection attempt ${i + 1} failed:`, error);
+      if (i < retries - 1) {
+        console.log(`Retrying in ${delay/1000} seconds...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      } else {
+        throw error;
+      }
+    }
+  }
+};
+
+// Start the server
+connectWithRetry()
   .then(() => {
-    console.log('Connected to MongoDB');
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
       console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
@@ -100,6 +129,6 @@ mongoose.connect(process.env.MONGODB_URI)
     });
   })
   .catch(err => {
-    console.error('MongoDB connection error:', err);
+    console.error('Failed to connect to MongoDB after retries:', err);
     process.exit(1);
   }); 
