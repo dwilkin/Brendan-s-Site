@@ -60,6 +60,8 @@ A containerized web application featuring a sleek, SEO-optimized sales form that
      - `NODE_ENV`: Set to "production"
    - Configure the build command: `npm install && cd client && npm install && npm run build && cd ..`
    - Configure the run command: `npm start`
+   - Set the HTTP port to `5000`
+   - Enable HTTP health checks
    - Deploy the application
 
 ## Environment Variables
@@ -71,7 +73,7 @@ A containerized web application featuring a sleek, SEO-optimized sales form that
 
 ## Usage
 
-1. Access the application at `http://localhost:3000` (local) or your DigitalOcean app URL
+1. Access the application at your DigitalOcean app URL
 2. Fill out the form with customer information
 3. Submit the form to:
    - Save data to MongoDB
@@ -81,7 +83,7 @@ A containerized web application featuring a sleek, SEO-optimized sales form that
 ## Development
 
 - Backend runs on port 5000
-- Frontend runs on port 3000
+- Frontend runs on port 3000 (local development only)
 
 ## License
 

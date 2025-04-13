@@ -10,10 +10,6 @@ COPY client/package*.json ./client/
 RUN npm install
 RUN cd client && npm install
 
-# Create necessary directories
-RUN mkdir -p client/public
-RUN mkdir -p client/src
-
 # Copy source files
 COPY . .
 COPY client ./client

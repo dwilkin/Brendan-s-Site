@@ -70,17 +70,12 @@ app.post('/api/submit-form', async (req, res) => {
 
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
-  // Set static folder
-  const staticPath = path.join(__dirname, 'client/build');
-  console.log('Serving static files from:', staticPath);
-  
-  app.use(express.static(staticPath));
+  // Serve static files from the React app
+  app.use(express.static(path.join(__dirname, 'client/build')));
 
   // Handle React routing, return all requests to React app
   app.get('*', (req, res) => {
-    const indexPath = path.join(staticPath, 'index.html');
-    console.log('Serving index.html from:', indexPath);
-    res.sendFile(indexPath);
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
   });
 }
 
@@ -91,6 +86,7 @@ mongoose.connect(process.env.MONGODB_URI)
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
       console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
+      console.log(`Static files path: ${path.join(__dirname, 'client/build')}`);
     });
   })
   .catch(err => console.error('MongoDB connection error:', err)); 
